@@ -1,0 +1,12 @@
+variables:
+  - name: kubernetesNamespace
+    value: file-synchronizer
+
+  - name: linuxPool
+    value: AWS-Centos7
+
+  - name: kubernetesServiceConnectionStaging
+    value: ColtAirGeneralStaging-file-synchronizer-1695043699968
+
+  - name: kubernetesServiceConnectionProd
+    value: ColtAirGeneralProd-file-synchronizer-1695050568714

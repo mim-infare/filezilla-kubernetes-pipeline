@@ -1,0 +1,44 @@
+trigger:
+  branches:
+    include: 
+      - staging
+      - production
+  paths:
+    exclude:
+      - .github
+pr:
+  branches:
+    include: 
+      - staging
+      - production
+  paths:
+    exclude:
+      - .github
+
+resources:
+  repositories:
+    - repository: common
+      type: github
+      name: InfareSolutions/azure-pipelines-yaml
+      endpoint: InfareSolutions-FileSynchronizer
+
+variables:
+  - template: vars.yml@common
+
+stages:
+  - stage: Deploy
+    pool: ${{ variables.linuxPool }}
+    displayName: Deploy filezilla to staging
+    jobs:
+      - job:
+        steps:
+          - checkout: self
+            clean: true
+          - task: KubernetesManifest@1
+            inputs:
+              action: deploy
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceEndpoint: ${{ variables.kubernetesServiceConnectionStaging }}
+              namespace: ${{ variables.kubernetesNamespace }}
+              manifests: '.k8s/staging-k8s.yml'
+              
